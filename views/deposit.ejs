@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zxx">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <!-- SITE TITLE -->
+        <title>HeroApp - Multipurpose Creative App Landing Page HTML5 Template</title>
+        <!-- Bootstrap min CSS -->
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Animate CSS -->
+        <link href="assets/css/animate.css" rel="stylesheet">
+        <!-- Icofont CSS -->
+        <link href="assets/css/icofont.css" rel="stylesheet">
+        <!-- Magnific Popup CSS -->
+        <link href="assets/css/magnific-popup.css" rel="stylesheet">
+        <!-- Style CSS -->
+        <link href="assets/css/style.css" rel="stylesheet">
+        <!-- Responsive CSS -->
+        <link href="assets/css/responsive.css" rel="stylesheet">
+        <!-- Default Color CSS -->
+        <link href="assets/css/color/color-default.css" rel="stylesheet">
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="assets/img/favicon.ico">
+
+        <link href="assets/css/deposit.css" rel="stylesheet">
+    </head>
+    
+    <body data-spy="scroll" data-offset="70">
+        <!-- START PRELOADER -->
+        <div class="preloader-wrap">
+            <div class="preloader">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>   
+        </div>   
+        <!-- END PRELOADER -->
+
+        <!-- START NAVBAR -->
+        <nav class="navbar fixed-top navbar-expand-md navbar-light top-menu menu-shrink">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    HeroApp
+                </a>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#send" class="nav-link">Send</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#fees" class="nav-link">Fees</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#faqs" class="nav-link">Faqs</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- END NAVBAR -->
+
+        <!-- START APP SECTION -->
+        <section id="send" class="send-section gray-bg"> 
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12"> 
+                        <div class="section-title wow fadeInUp" data-wow-delay=".3s"> 
+                            <h2>Send your coins</h2>
+                        </div>
+                    </div><!-- END COL -->
+                </div><!-- END ROW -->
+                <div class="row">
+                    <div class="col-lg-1"></div>
+                    <div class="col-lg-10"> 
+                        <div class="wow fadeInUp" data-wow-delay=".6s">
+                            <h3>Letter of Guarantee :</h3>
+                        </div>
+                    </div><!-- END COL -->
+                </div><!-- END ROW -->
+                <div class="row"> 
+                    <div class="col-lg-3"></div>
+                    <div class="col-lg-6">
+                        <div class="wow fadeInUp" data-wow-delay=".6s">
+                            <div class="letter-panel" _id=<%if(id){%><%= id %><%}%> >
+                            </div>
+                        </div>
+                    </div><!-- END COL -->
+                    <div class="col-lg-3"></div>
+                </div><!-- END ROW -->
+                <div class="row pt-5">
+                    <div class="col-lg-1"></div>
+                    <div class="col-lg-10"> 
+                        <div class="wow fadeInUp" data-wow-delay=".6s"> 
+                            <h3>Send your coins to :</h3>
+                        </div>
+                    </div><!-- END COL -->
+                </div><!-- END ROW -->
+
+                <div class="row"> 
+                    <div class="col-lg-3"></div>
+                    <div class="col-lg-6">
+                        <div class="wow fadeInUp" data-wow-delay=".6s">
+                            <div class="address-panel">
+                                <div style="width: 325px; margin: auto;">
+                                    <div id="addrs">
+                                    </div>
+                                    <div class="text-center">
+                                        <div id="loader"></div>
+                                        <div id="add_addr" >Add incoming address</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="qrcode" class="text-center">
+                                <img/>
+                            </div>
+                        </div>
+                    </div><!-- END COL -->
+                    <div class="col-lg-3"></div>
+                </div><!-- END ROW -->
+                <div class="row pt-5"> 
+                    <div class="col-lg-3"></div>
+                    <div class="col-lg-6">
+                        <div class="wow fadeInUp" data-wow-delay=".6s">
+                            <div class="know-panel" mixercode=<%if(mixercode){%><%= mixercode %><%}%> >
+                                <p><b>Do you know:</b> When you use CryptoMixer with the same code, you pay less service fee! Your CryptoMixer code is: <%if(mixercode){%><%= mixercode %><%}%>. Save it! See Fees for details.</p>
+                            </div>
+                        </div>
+                    </div><!-- END COL -->
+                    <div class="col-lg-3"></div>
+                </div><!-- END ROW -->
+            </div><!-- END CONTAINER -->
+        </section>
+        <!-- END APP SECTION -->
+        <!-- START FEE SECTION -->
+        <section id="fees" class="faqs-section gray-bg"> 
+            <div class="container"> 
+                <div class="row"> 
+                    <div class="col-lg-12"> 
+                        <div class="section-title wow fadeInUp" data-wow-delay=".3s"> 
+                            <h2>Fees</h2>
+                        </div>
+                    </div><!-- END COL -->
+                </div><!-- END ROW -->
+                
+                <div class="row"> 
+                    <div class="col-lg-12"> 
+                        <div class="fee-content">
+                            
+                        </div>
+                    </div><!-- END COL -->
+                </div><!-- END ROW -->
+            </div><!-- END CONTAINER -->
+        </section>
+        <!-- END FEE SECTION -->
+
+        <!-- START FAQS SECTION -->
+        <section id="faqs" class="faqs-section gray-bg"> 
+            <div class="container"> 
+                <div class="row"> 
+                    <div class="col-lg-12"> 
+                        <div class="section-title wow fadeInUp" data-wow-delay=".3s"> 
+                            <h2>Frequently Asked Questions</h2>
+                        </div>
+                    </div><!-- END COL -->
+                </div><!-- END ROW -->
+                
+                <div class="row"> 
+                    <div class="col-lg-12"> 
+                        <div class="faq-content">
+                            <div class="faq-panel wow fadeInUp" data-wow-delay=".4s">
+                                <h5 class="faq-title">
+                                    <span>1.</span> It is a long established fact that a reader will be 
+                                    <i class="icofont-plus"></i>
+                                </h5>
+                                <div class="faq-textarea">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                </div>
+                            </div><!-- END FAQ PANEL -->
+                            
+                            <div class="faq-panel wow fadeInUp" data-wow-delay=".5s">
+                                <h5 class="faq-title">
+                                    <span>2.</span>  Contrary to popular belief, Lorem Ipsum 
+                                    <i class="icofont-plus"></i>
+                                </h5>
+                                <div class="faq-textarea">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                </div>
+                            </div><!-- END FAQ PANEL -->
+                            
+                            <div class="faq-panel wow fadeInUp" data-wow-delay=".6s">
+                                <h5 class="faq-title">
+                                    <span>3.</span>  There are many variations of passages 
+                                    <i class="icofont-plus"></i>
+                                </h5>
+                                <div class="faq-textarea">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                </div>
+                            </div><!-- END FAQ PANEL -->
+                            
+                            <div class="faq-panel wow fadeInUp" data-wow-delay=".7s">
+                                <h5 class="faq-title">
+                                    <span>4.</span>  Lorem ipsum dolor sit amet 
+                                    <i class="icofont-plus"></i>
+                                </h5>
+                                <div class="faq-textarea">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                </div>
+                            </div><!-- END FAQ PANEL -->
+                            
+                            <div class="faq-panel wow fadeInUp" data-wow-delay=".8s">
+                                <h5 class="faq-title">
+                                    <span>5.</span>  Sed ut perspiciatis unde omnis iste natus  
+                                    <i class="icofont-plus"></i>
+                                </h5>
+                                <div class="faq-textarea">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                </div>
+                            </div><!-- END FAQ PANEL -->
+                            
+                            <div class="faq-panel wow fadeInUp" data-wow-delay=".9s">
+                                <h5 class="faq-title">
+                                    <span>6.</span>  But I must explain to you 
+                                    <i class="icofont-plus"></i>
+                                </h5>
+                                <div class="faq-textarea">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                </div>
+                            </div><!-- END FAQ PANEL -->
+                        </div>
+                    </div><!-- END COL -->
+                </div><!-- END ROW -->
+            </div><!-- END CONTAINER -->
+        </section>
+        <!-- END FAQS SECTION -->
+        <!-- START FOOTER AREA -->
+        <footer id="footer"> 
+            <div class="footer-bottom">
+                <div class="container"> 
+                    <div class="row"> 
+                        <div class="col-md-4 col-lg-4"> 
+                            <p class="copyright">Copyright 2019 © all rights by EnvyTheme</p>
+                        </div>
+                        <div class="col-md-5 col-lg-5"> 
+                            <p class="donation">Donations: <a>1CrypMixXWtTjYGCM5ZJmyQYP1Y39P7aLM</a></p>
+                        </div>
+                        <div class="col-md-3 col-lg-3"> 
+                            <ul class="social-links"> 
+                                <li>Follow us :</li>
+                                <li>
+                                    <a href="#">
+                                        <i class="icofont-facebook"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="icofont-twitter"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="icofont-google-plus"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="icofont-instagram"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="icofont-pinterest"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div><!-- END ROW -->
+                </div><!-- END CONTAINER -->
+            </div><!-- END FOOTER BOTTOM -->
+        </footer>
+        <!-- END FOOTER AREA -->
+        
+
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="assets/js/jquery-1.12.4.min.js"></script>
+        <!-- Popper JS -->
+        <script src="assets/js/popper.min.js"></script>
+        <!-- Bootstrap JS -->
+        <script src="assets/js/bootstrap.min.js"></script>
+        <!-- Jquery Counterup JS -->
+        <script src="assets/js/jquery.counterup.min.js"></script>
+        <!-- Waypoints JS -->
+        <script src="assets/js/waypoints.min.js"></script>
+        <!-- jquery.magnific-popup JS -->
+        <script src="assets/js/jquery.magnific-popup.min.js"></script>
+        <!-- Jquery Particleground JS -->
+        <script src="assets/js/jquery.particleground.min.js"></script>
+        <!-- Wow JS -->
+        <script src="assets/js/wow.min.js"></script>
+        <!-- AjaxChimp Min JS -->
+        <script src="assets/js/jquery.ajaxchimp.min.js"></script>
+        <!-- Form Validator Min JS -->
+        <script src="assets/js/form-validator.min.js"></script>
+        <!-- Contact Form Min JS -->
+        <script src="assets/js/contact-form-script.js"></script>
+        <!-- Custom JS -->
+        <script src="assets/js/deposit.js"></script>
+    </body>
+</html>

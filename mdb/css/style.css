@@ -1,0 +1,164 @@
+html, body {
+    height: 100%;
+}
+.container-fluid, .container-fluid>.row{
+    height: 100%;
+}
+.static{
+    background-color: chocolate;
+}
+.btc-static, .profit-static{
+    padding: 50px 0;
+}
+.avatar{
+    padding: 30px;
+    color: white;
+    font-size: 30px;
+    font-weight: 900;
+}
+.title-label{
+    color: black;
+    font-size: 40px;
+    font-weight: 900;
+}
+.price-label{
+    color: blue;
+    font-size: 40px;
+    font-weight: 900;
+}
+.addbot{
+    background-color: darkslategrey;
+    padding: 20px 0;
+}
+.bot-panel{
+    margin: 0 auto;
+}
+.bot-header>div{
+    margin: auto 0;
+}
+.bot-name{
+    color: black;
+    font-size: 30px;
+    font-weight: 700;
+}
+.bot-status{
+    font-size: 14px;
+}
+.gain-net{
+    color: goldenrod
+}
+.bots-scrolllist-col{
+    padding: 0;
+}
+.custom-switch .custom-control-label::before{
+    width: 2.5rem;
+}
+.custom-switch .custom-control-input:checked~.custom-control-label::after {
+    background-color: #fff;
+    -webkit-transform: translateX(1.5rem);
+    transform: translateX(1.5rem);
+}
+
+.scrollbar-cyan::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    background-color: #F5F5F5;
+    border-radius: 10px; 
+}
+
+.scrollbar-cyan::-webkit-scrollbar {
+    width: 12px;
+    background-color: #F5F5F5; 
+}
+
+.scrollbar-cyan::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    background-color: #00bcd4; 
+}
+
+.bordered-cyan::-webkit-scrollbar-track {
+    -webkit-box-shadow: none;
+    border: 1px solid #00bcd4;
+}
+
+.bordered-cyan::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: none;
+}
+
+.square::-webkit-scrollbar-track {
+    border-radius: 0 !important;
+}
+
+.square::-webkit-scrollbar-thumb {
+    border-radius: 0 !important;
+}
+
+.bots-scroll-panel {
+    position: relative;
+    overflow-y: scroll;
+    height: 100vh;
+    border-radius: 0;
+}
+.bots-scroll-panel>div.card-body{
+    padding: 0;
+}
+.addBotPanel{
+    display: none;
+    padding: 50px 100px;
+}
+.rule .md-form{
+    display: inline-block;
+    margin: 0;
+    width: 80px;
+    padding: 0 10px;
+}
+.keypart .form-group{
+    margin: 0;
+}
+.addBotPanel .md-form{
+    margin: 0;
+}
+.addBotPanel h3{
+    padding-top: 25px;
+}
+.addBotPanel .buttons{
+    text-align: center;
+    padding: 30px 0;
+}
+/*
+timeframe selection
+*/
+.inline-radio {
+  width: 250px;
+  display: flex;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.inline-radio div {
+  position: relative;
+  flex: 1;
+}
+
+.inline-radio input {
+  width: 100%;
+  height: 30px;
+  opacity: 0;
+}
+
+.inline-radio label {
+  position: absolute;
+  top: 0; left: 0;
+  color: white;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  font-weight: 500;
+}
+
+.inline-radio input:checked + label {
+  font-weight: 900;
+  color: blue;
+}

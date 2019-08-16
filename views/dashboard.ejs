@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Trading Bot</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <!-- Bootstrap core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="css/mdb.min.css" rel="stylesheet">
+  <!-- Your custom styles (optional) -->
+  <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- Start your project here-->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col static">
+        <div class="row avatar">
+          <div class="col">
+            Picador
+          </div>
+        </div>
+        <div class="row btc-static">
+          <div class="col-4">
+            <div class="row">
+              <div class="col title-label">
+                Bitcoin Price
+              </div>
+            </div>
+            <div class="row">
+              <div class="col price-label">
+                <span id="btc-label">$11,657.07</span>
+              </div>  
+            </div>
+          </div>
+          <div class="col-8">
+            <div class="inline-radio">
+              <div><input type="radio" name="tf_btcusd" value=60><label>M1</label></div>
+              <div><input type="radio" name="tf_btcusd" value=300><label>M5</label></div>
+              <div><input type="radio" name="tf_btcusd" value=900><label>M15</label></div>
+              <div><input type="radio" name="tf_btcusd" value=3600 checked><label>1H</label></div>
+              <div><input type="radio" name="tf_btcusd" value=21600><label>6H</label></div>
+              <div><input type="radio" name="tf_btcusd" value=86400><label>1D</label></div>
+            </div>
+            <canvas id="btcChart"></canvas>
+          </div>
+        </div>
+        <div class="row profit-static">
+          <div class="col-4">
+            <div class="row">
+              <div class="col title-label">
+                Profit
+              </div>
+            </div>
+            <div class="row">
+              <div class="col price-label">
+                <span id="profit-label">$11,657.07</span>
+              </div>  
+            </div>
+          </div>
+          <div class="col-8">
+            <canvas id="profitChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="row">
+          <div class="col bots-scrolllist-col">
+            <!-- Exaple 1 -->
+            <div class="card square scrollbar-cyan bordered-cyan bots-scroll-panel">
+              <div class="card-body">
+                <div class="col text-center addbot">
+                  <button type="button" class="btn btn-outline-warning waves-effect">Add New<i class="pl-3 fas fa-plus-circle"></i></button>
+                </div>
+                <% if ( sessionFlash && sessionFlash.message) { %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <strong>Can't create bot!</strong> <%= sessionFlash.message %>
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <% } %>
+              </div>
+            </div>
+            <div class="addBotPanel">
+              <form id="addbotform" action="/api/v1.0/createNewBot" method="POST">
+                <div class="row">
+                  <div class="col">
+                    <h3>Bot Name</h3>
+                    <div class="md-form">
+                      <input type="text" id="botName" name="botName" class="form-control" value="SampleBot">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col rule">
+                    <h3>Buy Rules</h3>
+                    <span>If increases more than $
+                      <div class="md-form">
+                        <input type="text" id="buyIncAmt" name="buyIncAmt" class="form-control">
+                      </div>
+                      in
+                      <div class="md-form">
+                        <input type="text" id="buyIncMin" name="buyIncMin" class="form-control">
+                      </div>
+                      mins, then buy $
+                      <div class="md-form">
+                        <input type="text" id="buyAmt" name="buyAmt" class="form-control">
+                      </div>
+                    </span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col rule">
+                    <span>If decreases more than $
+                      <div class="md-form">
+                        <input type="text" id="buyDecAmt" name="buyDecAmt" class="form-control">
+                      </div>
+                      in
+                      <div class="md-form">
+                        <input type="text" id="buyDecMin" name="buyDecMin" class="form-control">
+                      </div>
+                      mins, then buy.
+                    </span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col rule">
+                    <h3>Sell Rules</h3>
+                    <span>Once an order is in, sell once the price goes +$
+                      <div class="md-form">
+                        <input type="text" id="sellIncAmt" name="sellIncAmt" class="form-control">
+                      </div>
+                    </span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col rule">
+                    <h3>Pause Rules</h3>
+                    <span>If price goes above $
+                      <div class="md-form">
+                        <input type="text" id="pauseOverPrice" name="pauseOverPrice" class="form-control">
+                      </div>
+                      then pause bot from buying.
+                    </span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col keypart">
+                    <h3>Coinbase Integration</h3>
+                    <!-- Horizontal material form -->
+                    <form>
+                      <!-- Grid row -->
+                      <div class="form-group row">
+                        <label for="apikey" class="col-sm-2 col-form-label">API Key</label>
+                        <div class="col-sm-10">
+                          <div class="md-form mt-0">
+                            <input type="text" class="form-control" id="apikey" name="apikey" value="dc8b80633631aa783b16052af9545250" placeholder="API Key">
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Grid row -->
+                      <!-- Grid row -->
+                      <div class="form-group row">
+                        <label for="apisecret" class="col-sm-2 col-form-label">API Secret</label>
+                        <div class="col-sm-10">
+                          <div class="md-form mt-0">
+                            <input type="text" class="form-control" id="apisecret" name="apisecret" value="yL+1MPAd2CaZ+gz//XKEYXbAU38Iinn3+HBo2gqlOFpmVMhg0Ce3qNvIG/nTih9yqi7eQMAKdzaL5WQr3OFKXw==" placeholder="API Secret">
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Grid row -->
+                      <!-- Grid row -->
+                      <div class="form-group row">
+                        <label for="apipass" class="col-sm-2 col-form-label">API Passphrase</label>
+                        <div class="col-sm-10">
+                          <div class="md-form mt-0">
+                            <input type="password" class="form-control" id="apipass" name="apipass" value="d6rcb6unl9i" placeholder="API Passphrase">
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Grid row -->
+                    </form>
+                    <!-- Horizontal material form -->
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col buttons">
+                    <button type="button" class="btn btn-primary" id="addCancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="addSave">Save</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- Exaple 1 -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Start your project here-->
+
+  <!-- SCRIPTS -->
+  <!-- JQuery -->
+  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="js/mdb.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <script type="text/javascript" src="scripts/dashboard.js"></script>
+</body>
+
+</html>
