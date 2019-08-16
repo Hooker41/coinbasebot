@@ -24,7 +24,7 @@ app.use(function(req, res, next){
 var { mongoDB } = require('./config');
 // set the port of our application
 // process.env.PORT lets the port be set by Heroku
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 3000;
 
 app.use(bodyParser.json({
   limit: '50mb'
