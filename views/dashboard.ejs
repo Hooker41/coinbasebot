@@ -20,8 +20,55 @@
 
   <!-- Start your project here-->
   <div class="container-fluid">
+    <div class="row bot-viewer justify-content-center">
+      <div class="col-6">
+        <div class="row">
+          <div class="col d-flex justify-content-between">
+            <span class="viewer-botname">Bot Name</span>
+            <button type="button" class="btn btn-white px-3" id="close-viewer"><i class="fas fa-times"></i></button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col pb-3">
+            <span class="viewer-state">Waiting to buy</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <canvas id="viewer-chart"></canvas>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="viewer-table">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Price Bought</th>
+                    <th scope="col">Price Sold</th>
+                    <th scope="col">Profit</th>
+                    <th scope="col">Margin</th>
+                  </tr>
+                </thead>
+                <tbody class="historytable">
+                  <!-- <tr>
+                    <th scope="row">5/1/19 5:01AM</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>+2%</td>
+                  </tr> -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="col static">
+        <div class="bull-bg"></div>
         <div class="row avatar">
           <div class="col">
             Picador
@@ -147,6 +194,7 @@
                     <span>If price goes above $
                       <div class="md-form">
                         <input type="text" id="pauseOverPrice" name="pauseOverPrice" class="form-control">
+                        <input type="hidden" name="botid" value="">
                       </div>
                       then pause bot from buying.
                     </span>

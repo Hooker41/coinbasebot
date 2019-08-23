@@ -4,25 +4,57 @@ const { Schema } = mongoose;
 
 const Bot = new Schema({
   name: String,
+  state: {
+    type: String,
+    default: 'Waiting to buy'
+  },
   buyRule: {
-    increaseAmount: Number,
-    increaseMin: Number,
-    increaseBuyAmount: Number,
-    decreaseAmount: Number,
-    decreaseMin: Number
+    increaseAmount: {
+      type: Number,
+      default: -1
+    },
+    increaseMin: {
+      type: Number,
+      default: -1
+    },
+    increaseBuyAmount: {
+      type: Number,
+      default: -1
+    },
+    decreaseAmount: {
+      type: Number,
+      default: -1
+    },
+    decreaseMin: {
+      type: Number,
+      default: -1
+    }
   },
   sellRule: {
-    increaseAmount: Number
+    increaseAmount: {
+      type: Number,
+      default: -1
+    }
   },
   pauseRule: {
-    increaseAmount: Number
+    abovePrice: {
+      type: Number,
+      default: -1
+    }
   },
   cbInfo: {
     key: String,
     secret: String,
     passphrase: String
   },
-  net: Number,
+  lastBoughtPrice: {
+    type: Number,
+    default: 0
+  },
+  net: {
+    type: Number,
+    default: 0
+  },
   createdAt: {
     type: Date,
     default: Date.now

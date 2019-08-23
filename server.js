@@ -6,6 +6,8 @@ var app = express();
 var session = require('express-session');
 var sessionStore = new session.MemoryStore;
 
+var {run} = require('./lib/engine');
+
 app.set('view engine', 'ejs');
 
 app.use(session({
@@ -42,4 +44,5 @@ console.log('Connection established');
 mongoDB.connection();
 var server = app.listen(port, async function () {
   console.log("Express server listening on port " + app.get('port'));
+  run();
 });

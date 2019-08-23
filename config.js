@@ -10,13 +10,14 @@ const mongoDB = {
     let self=this;
     mongoose.connect(this.url, this.config)
     mongoose.connection.on('connected', function () {
-        console.log('Mongoose connection open to ' + self.url);
+      mongoose.set('useFindAndModify', false);
+      console.log('Mongoose connection open to ' + self.url);
     });
     mongoose.connection.on('error',function (err) {
-        console.log('Mongoose connection error: ' + err);
+      console.log('Mongoose connection error: ' + err);
     });
     mongoose.connection.on('disconnected', function () {
-        console.log('Mongoose connection disconnected');
+      console.log('Mongoose connection disconnected');
     });
     return mongoose;
   }

@@ -17,9 +17,9 @@ function getBTCUSD(granularity){
           y: ele[4]
         })
       }
-      var dataset = chart.config.data.datasets[0];
+      var dataset = btcchart.config.data.datasets[0];
       dataset.data = data;
-      chart.update();
+      btcchart.update();
 
       $('span#btc-label').text('$ ' + result[0][4]);
     });
@@ -33,6 +33,16 @@ $('input[type=radio][name="tf_btcusd"]').change(function() {
 ///////////////////////////////////////////////
 // Show BTC-USD chart
 ///////////////////////////////////////////////
+Chart.plugins.register({
+  beforeDraw: function(chartInstance, easing) {
+    var ctx = chartInstance.chart.ctx;
+    ctx.fillStyle = 'white'; // your color here
+
+    var chartArea = chartInstance.chartArea;
+    ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
+  }
+});
+
 var ctx = document.getElementById('btcChart').getContext('2d');
 var cfg = {
   type: 'bar',
@@ -51,19 +61,32 @@ var cfg = {
   options: {
     title: {
 			display: true,
-			text: 'Bitcoin Price Chart'
+      text: 'Bitcoin Price Chart',
+      fontColor: 'white'
 		},
     legend: {
 			display: false,
 		},
     scales: {
       xAxes: [{
+        // gridLines: {
+        //   color: 'white',
+        // },
         type: 'time',
         distribution: 'series',
         ticks: {
           source: 'data',
-          autoSkip: true
+          autoSkip: true,
+          fontColor: 'white',
         }
+      }],
+      yAxes: [{
+        ticks:{
+          fontColor: 'white',
+        },
+        // gridLines: {
+        //   color: 'white',
+        // },
       }]
     },
     tooltips: {
@@ -79,52 +102,29 @@ var cfg = {
     }
   }
 };
-var chart = new Chart(ctx, cfg);
+var btcchart = new Chart(ctx, cfg);
 ///////////////////////////////////////////////
 // Show Total Profit Chart
 ///////////////////////////////////////////////
 setInterval(() => {
-  var profits=[
-    [1565348400, 11675.81, 11753.47, 11685.45, 11721.95, 124.68232146],
-    [1565344800, 11651.89, 11785.96, 11740.01, 11685.46, 484.11625297],
-    [1565341200, 11684.07, 11830.66, 11813.64, 11740.01, 479.40748491],
-    [1565337600, 11779.45, 11962.96, 11830, 11813.49, 771.26559362],
-    [1565334000, 11776, 11855.96, 11840.01, 11830, 589.82499688],
-    [1565330400, 11781, 11847.35, 11840.01, 11840.01, 302.61852358],
-    [1565326800, 11807.66, 11885, 11880.01, 11840.95, 335.65170673],
-    [1565323200, 11860.01, 11914.99, 11860.54, 11880.85, 230.17922845],
-    [1565319600, 11837, 11935, 11906.3, 11860.51, 311.20050944],
-    [1565316000, 11852.58, 11910, 11880.45, 11909.98, 328.31340745],
-    [1565312400, 11860.04, 11959, 11957.74, 11881.15, 476.62842622],
-    [1565308800, 11887, 12040, 11982.39, 11958.58, 1224.2450796],
-    [1565305200, 11810.02, 12050, 11813.57, 11981, 1879.17920483],
-    [1565301600, 11713.24, 11850, 11714.97, 11814.39, 654.84073977],
-    [1565298000, 11587.04, 11740, 11593.99, 11714.9, 753.08594823],
-    [1565294400, 11483.03, 11600, 11556.12, 11595.99, 568.51059416],
-    [1565290800, 11501.55, 11647.68, 11624.99, 11560.61, 776.39053887],
-    [1565287200, 11500, 11635, 11561, 11624.98, 527.97885344],
-    [1565283600, 11451, 11725, 11706.37, 11561, 1918.07707378],
-    [1565280000, 11638.74, 11765, 11671.15, 11702.27, 599.80653648],
-    [1565276400, 11666.68, 11749.06, 11700.01, 11673.85, 528.61298863],
-    [1565272800, 11620.11, 11736.6, 11669.47, 11700.01, 859.37222182],
-    [1565269200, 11661.44, 11848.14, 11842.1, 11678.96, 832.37856297],
-    [1565265600, 11730.04, 11909.81, 11806.78, 11841.97, 670.9718069],
-    [1565262000, 11782, 11907.14, 11831.19, 11806.77, 421.41654747],
-    [1565258400, 11805.36, 11869.97, 11860.21, 11834.13, 217.41325521],
-    [1565254800, 11826.87, 11934, 11896.52, 11860.21, 215.17021964]]
-
+  $.get('/api/v1.0/getAllProfits', function(res){
+    const profits = res.tabledata;
     let data = [];
+    let sum = 0;
     for (let i in profits){
       let ele = profits[i];
+      sum += ele[1];
       data.push({
-        t: ele[0] * 1000,
-        y: ele[4]
+        t: ele[0],
+        y: ele[1]
       })
     }
+    console.log('all profits', data);
     var dataset = profitChart.config.data.datasets[0];
     dataset.data = data;
     profitChart.update();
-    $('span#profit-label').text('$ ' + profits[0][4]);
+    $('span#profit-label').text('$ ' + parseFloat(sum).toFixed(2));
+  });
 }, 5000);
 var profitCtx = document.getElementById('profitChart').getContext('2d');
 var profitCfg = {
@@ -144,7 +144,8 @@ var profitCfg = {
   options: {
     title: {
 			display: true,
-			text: 'Profit Chart'
+      text: 'Profit Chart',
+      fontColor: 'white'
 		},
     legend: {
 			display: false,
@@ -155,7 +156,13 @@ var profitCfg = {
         distribution: 'series',
         ticks: {
           source: 'data',
-          autoSkip: true
+          autoSkip: true,
+          fontColor: 'white'
+        }
+      }],
+      yAxes: [{
+        ticks: {
+          fontColor: 'white'
         }
       }]
     },
@@ -176,6 +183,9 @@ var profitChart = new Chart(profitCtx, profitCfg);
 ///////////////////////////////////////////////
 // Show Bot Chart
 ///////////////////////////////////////////////
+var botChartAry = {};
+var botsAry = [];
+var viewerBot = undefined;
 var botCfg = {
   type: 'bar',
   data: {
@@ -217,24 +227,30 @@ var botCfg = {
   }
 };
 $.get('/api/v1.0/getBots', function(res){
+  botChartAry={};
+  botsAry=res;
   for (let i in res){
     let bot = res[i];
     let _id = bot._id;
     let botName = bot.name;
-    let net = bot.net ? bot.net : 0;
+    let net = parseFloat(bot.net).toFixed(4);
+    let state = bot.state;
+    let checked = state != 'Paused' ? 'checked' : '';
     let newBot = '<div class="card border-light my-3 bot-panel" style="max-width: 30rem;">'+
       '<div class="card-header d-flex justify-content-between bot-header">'+
         '<div>'+
           '<span class="bot-name">'+ botName +'</span>'+
-          '<div class="bot-status">Waiting to buy</div>'+
+          '<div class="bot-state">'+
+            '<span botid="'+_id+'">'+state+'</span>'+
+          '</div>'+
         '</div>'+
         '<div class="custom-control custom-switch">'+
-          '<input type="checkbox" class="custom-control-input" id="'+_id+'">'+
+          '<input type="checkbox" class="custom-control-input" id="'+_id+'" '+checked+'>'+
           '<label class="custom-control-label" for="'+_id+'"></label>'+
         '</div>'+
         '<div>'+
           'Net : '+
-          '<span class="gain-net">$ '+ net +'</span>'+
+          '<span class="gain-net" botid="'+_id+'">$ '+ net +'</span>'+
         '</div>'+
       '</div>'+
       '<div class="card-body">'+
@@ -248,12 +264,116 @@ $.get('/api/v1.0/getBots', function(res){
     $('div.bots-scroll-panel>div.card-body').append(newBot);
     let canvas = $('canvas#canvas_'+_id);
     var botChart = new Chart(canvas, botCfg);
+    // var dataset = botChart.config.data.datasets[0];
+    // dataset.data = [];
+    // botChart.update();
+
+    botChartAry[_id] = botChart;
   }
 });
+const viewerCanvas = $('canvas#viewer-chart');
+var viewerChart = new Chart(viewerCanvas, botCfg);
+///////////////////////////////////////////////
+// Get bot profit data
+///////////////////////////////////////////////
+const getProfits = () => {
+  $.get('/api/v1.0/getProfits', function(res){
+    console.log('profits', res);
+    if (Object.keys(botChartAry).length > 0){
+      for (let botid in res){
+        let profitAry = res[botid];
+        let data = [];
+        for (let i in profitAry){
+          let profit = profitAry[i];
+          data.push({
+            t: profit[0],
+            y: profit[1]
+          })
+        }
+        let botchart = botChartAry[botid];
+        if (data.length > 0){
+          console.log(data);
+          var dataset = botchart.config.data.datasets[0];
+          dataset.data = data;
+          botchart.update();
+        }
+
+        if (viewerBot && botid == viewerBot._id){
+          var dataset = viewerChart.config.data.datasets[0];
+          dataset.data = data;
+          viewerChart.update();
+        }
+      }
+    }
+    setTimeout(() => {
+      getProfits();
+    }, 3000);
+  });
+}
+getProfits();
+///////////////////////////////////////////////
+// Check Balance
+///////////////////////////////////////////////
+const checkBalances=()=>{
+  $.get('/api/v1.0/getBalances', function(res){
+    // console.log('balance', res);
+    for (let botid in res){
+      const netspan = $('span[botid="'+botid+'"].gain-net');
+      const balance = parseFloat(res[botid]).toFixed(4);
+      netspan.text(balance);
+    }
+    setTimeout(() => {
+      checkBalances();
+    }, 3000);
+  });
+}
+checkBalances();
+///////////////////////////////////////////////
+// Check Status
+///////////////////////////////////////////////
+const checkStatus=()=>{
+  $.get('/api/v1.0/getStatus', function(res){
+    // console.log('state', res);
+    for (let botid in res){
+      const info = res[botid];
+      const state = info[0];
+      const lastboughtprice = info[1];
+      $('div.bot-state span[botid="'+botid+'"]').text(state);
+      if (state == 'Waiting to sell'){
+        $('div.bot-state span[botid="'+botid+'"]').text(state + ' ($' + lastboughtprice+')' );
+      }
+      if (viewerBot && botid == viewerBot._id){
+        $('span.viewer-state').text(state);
+        if (state == 'Waiting to sell'){
+          $('span.viewer-state').text(state + ' ($' + lastboughtprice+')' );
+        }
+      }
+      if (state == 'Paused'){
+        $('input#'+botid).prop("checked", false);
+      }
+    }
+    setTimeout(() => {
+      checkStatus();
+    }, 3000);
+  });
+}
+checkStatus();
 ///////////////////////////////////////////////
 // Clicn Add New Bot Button
 ///////////////////////////////////////////////
 $('div.addbot button').on('click', function(){
+  $('input[name="botName"]').val('');
+  $('input[name="buyIncAmt"]').val('');
+  $('input[name="buyIncMin"]').val('');
+  $('input[name="buyAmt"]').val('');
+  $('input[name="buyDecAmt"]').val('');
+  $('input[name="buyDecMin"]').val('');
+  $('input[name="sellIncAmt"]').val('');
+  $('input[name="pauseOverPrice"]').val('');
+  $('input[name="apikey"]').val('');
+  $('input[name="apisecret"]').val('');
+  $('input[name="apipass"]').val('');
+  $('input[name="botid"]').val('');
   $('div.bots-scroll-panel').css('display', 'none');
   $('div.addBotPanel').css('display', 'block');
 });
@@ -270,7 +390,10 @@ $('button#addCancel').on('click', function(){
 $('button#addSave').on('click', function(e){
   e.preventDefault();
   let form = $('form#addbotform');
-  console.log(form.serializeArray());
+  const botID = $('input[name="botid"]').val();
+  if (botID != ''){
+    form.attr('action', '/api/v1.0/modifyBot');
+  }
   form.submit();
 });
 ///////////////////////////////////////////////
@@ -278,14 +401,90 @@ $('button#addSave').on('click', function(e){
 ///////////////////////////////////////////////
 $(document).on("click", "a.modify" , function() {
   const botID = $(this).attr('botid');
-  let record = {
-    botID,
-    type: 'buy',
-    price: Math.random() * 10000,
-    amount: Math.random() * 100,
-  }
-
-  $.post('/api/v1.0/addHistory', {record}, function(res){
-    console.log(res);
+  $.post('/api/v1.0/getBotInfo', {botID}, function(res){
+    if (res){
+      $('input[name="botName"]').val(res.name);
+      $('input[name="buyIncAmt"]').val(res.buyRule.increaseAmount);
+      $('input[name="buyIncMin"]').val(res.buyRule.increaseMin);
+      $('input[name="buyAmt"]').val(res.buyRule.increaseBuyAmount);
+      $('input[name="buyDecAmt"]').val(res.buyRule.decreaseAmount);
+      $('input[name="buyDecMin"]').val(res.buyRule.decreaseMin);
+      $('input[name="sellIncAmt"]').val(res.sellRule.increaseAmount);
+      $('input[name="pauseOverPrice"]').val(res.pauseRule.increaseAmount);
+      $('input[name="apikey"]').val(res.cbInfo.key);
+      $('input[name="apisecret"]').val(res.cbInfo.secret);
+      $('input[name="apipass"]').val(res.cbInfo.passphrase);
+      $('input[name="botid"]').val(botID);
+      $('div.bots-scroll-panel').css('display', 'none');
+      $('div.addBotPanel').css('display', 'block');
+    }
   });
 });
+///////////////////////////////////////////////
+// Click Bot View Close button
+///////////////////////////////////////////////
+$('button#close-viewer').on('click', function(){
+  $('div.bot-viewer').css('display', 'none');
+});
+///////////////////////////////////////////////
+// Click Bot View button
+///////////////////////////////////////////////
+$(document).on("click", "a.view" , function() {
+  const botID = $(this).attr('botid');
+  const bot = botsAry.find((item)=>item._id == botID);
+  viewerBot = bot;
+  $('span.viewer-botname').text(bot.name);
+  $('div.bot-viewer').css('display', 'flex');
+  $.post('/api/v1.0/getBotHistory', {botID}, function(res){
+    Date.prototype.formatMMDDYYYY = function(){
+      var hours = this.getHours();
+      var minutes = this.getMinutes();
+      var ampm = hours >= 12 ? 'pm' : 'am';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
+      minutes = minutes < 10 ? '0'+minutes : minutes;
+      var strTime = hours + ':' + minutes + ' ' + ampm;
+      return (this.getMonth() + 1) + 
+      "/" +  this.getDate() +
+      "/" +  this.getFullYear() +
+      ' ' + strTime;
+    }
+    $('tbody.historytable tr').remove();
+    const data = res.tabledata;
+    data.map((item)=>{
+      const date = new Date(item[0]).formatMMDDYYYY();
+      const boughtPrice = '$' + item[1];
+      const soldPrice = '$' + item[2];
+      const profit = '$' + parseFloat(item[3]).toFixed(4);
+      const margin = parseFloat(item[4]).toFixed(2) + '%';
+      $('tbody.historytable').append(
+        '<tr>'+
+        '<th scope="row">'+date+'</th>'+
+        '<td>'+boughtPrice+'</td>'+
+        '<td>'+soldPrice+'</td>'+
+        '<td>'+profit+'</td>'+
+        '<td>'+margin+'</td></tr>');
+    });
+  });
+});
+
+$(document).on("click", 'input[type="checkbox"]' , function() {
+  const botID = $(this).attr('id');
+  const this1 = this;
+  // let isChecked = $(this).prop("checked");
+  // console.log({isChecked});
+  // check Bot Balance
+  $.post('/api/v1.0/changeState', {botID}, function(res){
+    // console.log(res);
+    if (res.state == 'Paused'){
+      $(this1).prop("checked", false);
+    } else {
+      $(this1).prop("checked", true);
+    }
+    $('div.bot-state span[botid="'+botID+'"]').text(res.state);
+    if (res.state == 'Waiting to sell'){
+      $('div.bot-state span[botid="'+botID+'"]').text(res.state + ' $' + res.lastboughtprice );
+    }
+  });
+});
+
