@@ -21,7 +21,7 @@ router.post('/createNewBot', async function(req, res){
       increaseAmount: params.sellIncAmt
     },
     pauseRule: {
-      increaseAmount: params.pauseOverPrice
+      abovePrice: params.pauseOverPrice
     },
     cbInfo: {
       key: params.apikey,
@@ -83,7 +83,7 @@ router.post('/modifyBot', async function(req, res){
       increaseAmount: params.sellIncAmt
     },
     pauseRule: {
-      increaseAmount: params.pauseOverPrice
+      abovePrice: params.pauseOverPrice
     },
     cbInfo: {
       key: params.apikey,

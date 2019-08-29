@@ -25,7 +25,7 @@
         <div class="row">
           <div class="col d-flex justify-content-between">
             <span class="viewer-botname">Bot Name</span>
-            <button type="button" class="btn btn-white px-3" id="close-viewer"><i class="fas fa-times"></i></button>
+            <span style="font-size: 50px; cursor: pointer;" id="close-viewer"><i class="fas fa-times"></i></span>
           </div>
         </div>
         <div class="row">
@@ -35,6 +35,14 @@
         </div>
         <div class="row">
           <div class="col">
+            <div class="inline-radio">
+              <div><input type="radio" name="tf_viewerprofit" value=60><label>M1</label></div>
+              <div><input type="radio" name="tf_viewerprofit" value=300><label>M5</label></div>
+              <div><input type="radio" name="tf_viewerprofit" value=900><label>M15</label></div>
+              <div><input type="radio" name="tf_viewerprofit" value=3600 checked><label>1H</label></div>
+              <div><input type="radio" name="tf_viewerprofit" value=21600><label>6H</label></div>
+              <div><input type="radio" name="tf_viewerprofit" value=86400><label>1D</label></div>
+            </div>
             <canvas id="viewer-chart"></canvas>
           </div>
         </div>
@@ -68,14 +76,16 @@
     </div>
     <div class="row">
       <div class="col static">
-        <div class="bull-bg"></div>
+        <div class="bull-bg">
+          <div style="background: rgba(204,80,80,0.3); height: 100%"></div>
+        </div>
         <div class="row avatar">
           <div class="col">
             Picador
           </div>
         </div>
         <div class="row btc-static">
-          <div class="col-4">
+          <div class="col-4" style="margin: auto">
             <div class="row">
               <div class="col title-label">
                 Bitcoin Price
@@ -87,7 +97,7 @@
               </div>  
             </div>
           </div>
-          <div class="col-8">
+          <div class="col-8" style="background-color: white; padding: 25px 12px;">
             <div class="inline-radio">
               <div><input type="radio" name="tf_btcusd" value=60><label>M1</label></div>
               <div><input type="radio" name="tf_btcusd" value=300><label>M5</label></div>
@@ -100,7 +110,7 @@
           </div>
         </div>
         <div class="row profit-static">
-          <div class="col-4">
+          <div class="col-4" style="margin: auto">
             <div class="row">
               <div class="col title-label">
                 Profit
@@ -108,11 +118,19 @@
             </div>
             <div class="row">
               <div class="col price-label">
-                <span id="profit-label">$11,657.07</span>
+                <span id="profit-label">$0</span>
               </div>  
             </div>
           </div>
-          <div class="col-8">
+          <div class="col-8" style="background-color: white; padding: 25px 12px;">
+            <div class="inline-radio">
+              <div><input type="radio" name="tf_profit" value=60><label>M1</label></div>
+              <div><input type="radio" name="tf_profit" value=300><label>M5</label></div>
+              <div><input type="radio" name="tf_profit" value=900><label>M15</label></div>
+              <div><input type="radio" name="tf_profit" value=3600 checked><label>1H</label></div>
+              <div><input type="radio" name="tf_profit" value=21600><label>6H</label></div>
+              <div><input type="radio" name="tf_profit" value=86400><label>1D</label></div>
+            </div>
             <canvas id="profitChart"></canvas>
           </div>
         </div>
@@ -140,7 +158,9 @@
               <form id="addbotform" action="/api/v1.0/createNewBot" method="POST">
                 <div class="row">
                   <div class="col">
-                    <h3>Bot Name</h3>
+                    <div class="rulehead">
+                      <span>Bot Name</span>
+                    </div>
                     <div class="md-form">
                       <input type="text" id="botName" name="botName" class="form-control" value="SampleBot">
                     </div>
@@ -148,7 +168,9 @@
                 </div>
                 <div class="row">
                   <div class="col rule">
-                    <h3>Buy Rules</h3>
+                    <div class="rulehead">
+                      <span>Buy Rules</span>
+                    </div>
                     <span>If increases more than $
                       <div class="md-form">
                         <input type="text" id="buyIncAmt" name="buyIncAmt" class="form-control">
@@ -180,7 +202,9 @@
                 </div>
                 <div class="row">
                   <div class="col rule">
-                    <h3>Sell Rules</h3>
+                    <div class="rulehead">
+                      <span>Sell Rules</span>
+                    </div>
                     <span>Once an order is in, sell once the price goes +$
                       <div class="md-form">
                         <input type="text" id="sellIncAmt" name="sellIncAmt" class="form-control">
@@ -190,7 +214,9 @@
                 </div>
                 <div class="row">
                   <div class="col rule">
-                    <h3>Pause Rules</h3>
+                    <div class="rulehead">
+                      <span>Pause Rules</span>
+                    </div>
                     <span>If price goes above $
                       <div class="md-form">
                         <input type="text" id="pauseOverPrice" name="pauseOverPrice" class="form-control">
@@ -202,7 +228,9 @@
                 </div>
                 <div class="row">
                   <div class="col keypart">
-                    <h3>Coinbase Integration</h3>
+                    <div class="rulehead">
+                      <span>Coinbase Integration</span>
+                    </div>
                     <!-- Horizontal material form -->
                     <form>
                       <!-- Grid row -->

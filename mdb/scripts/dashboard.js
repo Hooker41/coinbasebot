@@ -2,6 +2,9 @@
 // Get coinbase BTCUSD data
 ///////////////////////////////////////////////
 let btcusdInterval = undefined;
+function currencyFormat(num) {
+  return '$' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+}
 function getBTCUSD(granularity){
   if (btcusdInterval){
     clearInterval(btcusdInterval);
@@ -21,7 +24,7 @@ function getBTCUSD(granularity){
       dataset.data = data;
       btcchart.update();
 
-      $('span#btc-label').text('$ ' + result[0][4]);
+      $('span#btc-label').text(currencyFormat(result[0][4]));
     });
   }, 5000);
 }
@@ -59,44 +62,52 @@ var cfg = {
     }]
   },
   options: {
-    title: {
-			display: true,
-      text: 'Bitcoin Price Chart',
-      fontColor: 'white'
-		},
     legend: {
 			display: false,
 		},
     scales: {
       xAxes: [{
-        // gridLines: {
-        //   color: 'white',
-        // },
+        gridLines: {
+          // color: 'white',
+          display: false
+        },
         type: 'time',
         distribution: 'series',
-        ticks: {
-          source: 'data',
-          autoSkip: true,
-          fontColor: 'white',
-        }
+        // ticks: {
+        //   source: 'data',
+        //   autoSkip: true,
+        //   fontColor: 'white',
+        // }
       }],
       yAxes: [{
+        position: 'right',
         ticks:{
-          fontColor: 'white',
+          // fontColor: 'white',
+          display: false,
         },
-        // gridLines: {
-        //   color: 'white',
-        // },
+        gridLines: {
+          // color: 'white',
+          display: false
+        },
       }]
     },
     tooltips: {
       intersect: false,
       mode: 'index',
       displayColors: false,
+      bodyFontSize: 16,
+      footerFontColor: '#aaa',
       callbacks: {
         label: function(tooltipItem, myData) {
-          let label ='$ ' + parseFloat(tooltipItem.value).toFixed(2);
+          const label = currencyFormat(tooltipItem.value);
           return label;
+        },
+        footer: function(tooltipItem, myData) {
+          const current = tooltipItem[0].xLabel;
+          return current;
+        },
+        title: function(tooltipItem, myData) {
+          return false;
         }
       }
     }
@@ -123,7 +134,7 @@ setInterval(() => {
     var dataset = profitChart.config.data.datasets[0];
     dataset.data = data;
     profitChart.update();
-    $('span#profit-label').text('$ ' + parseFloat(sum).toFixed(2));
+    $('span#profit-label').text(currencyFormat(sum));
   });
 }, 5000);
 var profitCtx = document.getElementById('profitChart').getContext('2d');
@@ -142,38 +153,44 @@ var profitCfg = {
     }]
   },
   options: {
-    title: {
-			display: true,
-      text: 'Profit Chart',
-      fontColor: 'white'
-		},
     legend: {
 			display: false,
 		},
     scales: {
       xAxes: [{
+        gridLines: {
+          display: false
+        },
         type: 'time',
         distribution: 'series',
-        ticks: {
-          source: 'data',
-          autoSkip: true,
-          fontColor: 'white'
-        }
       }],
       yAxes: [{
-        ticks: {
-          fontColor: 'white'
-        }
+        position: 'right',
+        ticks:{
+          display: false,
+        },
+        gridLines: {
+          display: false
+        },
       }]
     },
     tooltips: {
       intersect: false,
       mode: 'index',
       displayColors: false,
+      bodyFontSize: 16,
+      footerFontColor: '#aaa',
       callbacks: {
         label: function(tooltipItem, myData) {
-          let label ='$ ' + parseFloat(tooltipItem.value).toFixed(2);
+          const label = currencyFormat(tooltipItem.value);
           return label;
+        },
+        footer: function(tooltipItem, myData) {
+          const current = tooltipItem[0].xLabel;
+          return current;
+        },
+        title: function(tooltipItem, myData) {
+          return false;
         }
       }
     }
@@ -205,22 +222,39 @@ var botCfg = {
 		},
     scales: {
       xAxes: [{
+        gridLines: {
+          display: false
+        },
         type: 'time',
         distribution: 'series',
-        ticks: {
-          source: 'data',
-          autoSkip: true
-        }
+      }],
+      yAxes: [{
+        position: 'right',
+        ticks:{
+          display: false,
+        },
+        gridLines: {
+          display: false
+        },
       }]
     },
     tooltips: {
       intersect: false,
       mode: 'index',
       displayColors: false,
+      bodyFontSize: 16,
+      footerFontColor: '#aaa',
       callbacks: {
         label: function(tooltipItem, myData) {
-          let label ='$ ' + parseFloat(tooltipItem.value).toFixed(2);
+          const label = currencyFormat(tooltipItem.value);
           return label;
+        },
+        footer: function(tooltipItem, myData) {
+          const current = tooltipItem[0].xLabel;
+          return current;
+        },
+        title: function(tooltipItem, myData) {
+          return false;
         }
       }
     }
@@ -233,7 +267,7 @@ $.get('/api/v1.0/getBots', function(res){
     let bot = res[i];
     let _id = bot._id;
     let botName = bot.name;
-    let net = parseFloat(bot.net).toFixed(4);
+    let net = bot.net;
     let state = bot.state;
     let checked = state != 'Paused' ? 'checked' : '';
     let newBot = '<div class="card border-light my-3 bot-panel" style="max-width: 30rem;">'+
@@ -250,7 +284,7 @@ $.get('/api/v1.0/getBots', function(res){
         '</div>'+
         '<div>'+
           'Net : '+
-          '<span class="gain-net" botid="'+_id+'">$ '+ net +'</span>'+
+          '<span class="gain-net" botid="'+_id+'">'+currencyFormat(net)+'</span>'+
         '</div>'+
       '</div>'+
       '<div class="card-body">'+
@@ -319,7 +353,7 @@ const checkBalances=()=>{
     // console.log('balance', res);
     for (let botid in res){
       const netspan = $('span[botid="'+botid+'"].gain-net');
-      const balance = parseFloat(res[botid]).toFixed(4);
+      const balance = currencyFormat(res[botid]);
       netspan.text(balance);
     }
     setTimeout(() => {
@@ -410,7 +444,7 @@ $(document).on("click", "a.modify" , function() {
       $('input[name="buyDecAmt"]').val(res.buyRule.decreaseAmount);
       $('input[name="buyDecMin"]').val(res.buyRule.decreaseMin);
       $('input[name="sellIncAmt"]').val(res.sellRule.increaseAmount);
-      $('input[name="pauseOverPrice"]').val(res.pauseRule.increaseAmount);
+      $('input[name="pauseOverPrice"]').val(res.pauseRule.abovePrice);
       $('input[name="apikey"]').val(res.cbInfo.key);
       $('input[name="apisecret"]').val(res.cbInfo.secret);
       $('input[name="apipass"]').val(res.cbInfo.passphrase);
@@ -423,7 +457,7 @@ $(document).on("click", "a.modify" , function() {
 ///////////////////////////////////////////////
 // Click Bot View Close button
 ///////////////////////////////////////////////
-$('button#close-viewer').on('click', function(){
+$('span#close-viewer').on('click', function(){
   $('div.bot-viewer').css('display', 'none');
 });
 ///////////////////////////////////////////////
