@@ -317,8 +317,10 @@ const getProfits = () => {
       for (let botid in res){
         let profitAry = res[botid];
         let data = [];
+        let profitSum = 0;
         for (let i in profitAry){
           let profit = profitAry[i];
+          profitSum += profit[1];
           data.push({
             t: profit[0],
             y: profit[1]
@@ -331,7 +333,8 @@ const getProfits = () => {
           dataset.data = data;
           botchart.update();
         }
-
+        const netspan = $('span[botid="'+botid+'"].gain-net');
+        netspan.text(currencyFormat(profitSum));
         if (viewerBot && botid == viewerBot._id){
           var dataset = viewerChart.config.data.datasets[0];
           dataset.data = data;
@@ -345,23 +348,6 @@ const getProfits = () => {
   });
 }
 getProfits();
-///////////////////////////////////////////////
-// Check Balance
-///////////////////////////////////////////////
-const checkBalances=()=>{
-  $.get('/api/v1.0/getBalances', function(res){
-    // console.log('balance', res);
-    for (let botid in res){
-      const netspan = $('span[botid="'+botid+'"].gain-net');
-      const balance = currencyFormat(res[botid]);
-      netspan.text(balance);
-    }
-    setTimeout(() => {
-      checkBalances();
-    }, 3000);
-  });
-}
-checkBalances();
 ///////////////////////////////////////////////
 // Check Status
 ///////////////////////////////////////////////
@@ -397,11 +383,12 @@ checkStatus();
 ///////////////////////////////////////////////
 $('div.addbot button').on('click', function(){
   $('input[name="botName"]').val('');
-  $('input[name="buyIncAmt"]').val('');
-  $('input[name="buyIncMin"]').val('');
-  $('input[name="buyAmt"]').val('');
-  $('input[name="buyDecAmt"]').val('');
-  $('input[name="buyDecMin"]').val('');
+  $('input[name="incAmt"]').val('');
+  $('input[name="incMin"]').val('');
+  $('input[name="incBuyAmt"]').val('');
+  $('input[name="decAmt"]').val('');
+  $('input[name="decMin"]').val('');
+  $('input[name="decBuyAmt"]').val('');
   $('input[name="sellIncAmt"]').val('');
   $('input[name="pauseOverPrice"]').val('');
   $('input[name="apikey"]').val('');
@@ -438,11 +425,12 @@ $(document).on("click", "a.modify" , function() {
   $.post('/api/v1.0/getBotInfo', {botID}, function(res){
     if (res){
       $('input[name="botName"]').val(res.name);
-      $('input[name="buyIncAmt"]').val(res.buyRule.increaseAmount);
-      $('input[name="buyIncMin"]').val(res.buyRule.increaseMin);
-      $('input[name="buyAmt"]').val(res.buyRule.increaseBuyAmount);
-      $('input[name="buyDecAmt"]').val(res.buyRule.decreaseAmount);
-      $('input[name="buyDecMin"]').val(res.buyRule.decreaseMin);
+      $('input[name="incAmt"]').val(res.buyRule.increaseAmount);
+      $('input[name="incMin"]').val(res.buyRule.increaseMin);
+      $('input[name="incBuyAmt"]').val(res.buyRule.increaseBuyAmount);
+      $('input[name="decAmt"]').val(res.buyRule.decreaseAmount);
+      $('input[name="decMin"]').val(res.buyRule.decreaseMin);
+      $('input[name="decBuyAmt"]').val(res.buyRule.decreaseBuyAmount);
       $('input[name="sellIncAmt"]').val(res.sellRule.increaseAmount);
       $('input[name="pauseOverPrice"]').val(res.pauseRule.abovePrice);
       $('input[name="apikey"]').val(res.cbInfo.key);

@@ -11,11 +11,12 @@ router.post('/createNewBot', async function(req, res){
   let data = {
     name: params.botName,
     buyRule: {
-      increaseAmount: params.buyIncAmt,
-      increaseMin: params.buyIncMin,
-      increaseBuyAmount: params.buyAmt,
-      decreaseAmount: params.buyDecAmt,
-      decreaseMin: params.buyDecMin
+      increaseAmount: params.incAmt,
+      increaseMin: params.incMin,
+      increaseBuyAmount: params.incBuyAmt,
+      decreaseAmount: params.decAmt,
+      decreaseMin: params.decMin,
+      decreaseBuyAmount: params.decBuyAmt
     },
     sellRule: {
       increaseAmount: params.sellIncAmt
@@ -39,12 +40,12 @@ router.post('/createNewBot', async function(req, res){
   let isAuthed = await checkBalance(authedClient);
   if (isAuthed.success){
     const balance = isAuthed.balance;
-    if (balance > params.buyAmt){
+    if (params.incBuyAmt > 0 && params.decBuyAmt > 0 && balance > params.incBuyAmt && balance > params.decBuyAmt){
       data.state = 'Waiting to buy'
     } else {
       data.state = 'Paused'
     }
-    data.net = balance
+    data.net = 0
     let result = await Bot.create(data);
     if (!result._id){
       req.session.sessionFlash = {
@@ -73,11 +74,12 @@ router.post('/modifyBot', async function(req, res){
   let data = {
     name: params.botName,
     buyRule: {
-      increaseAmount: params.buyIncAmt,
-      increaseMin: params.buyIncMin,
-      increaseBuyAmount: params.buyAmt,
-      decreaseAmount: params.buyDecAmt,
-      decreaseMin: params.buyDecMin
+      increaseAmount: params.incAmt,
+      increaseMin: params.incMin,
+      increaseBuyAmount: params.incBuyAmt,
+      decreaseAmount: params.decAmt,
+      decreaseMin: params.decMin,
+      decreaseBuyAmount: params.decBuyAmt
     },
     sellRule: {
       increaseAmount: params.sellIncAmt
@@ -111,12 +113,13 @@ router.post('/changeState', async function(req, res){
     if (isAuthed){
       balance = isAuthed.balance
     }
-    if (balance > botInfo.buyRule.increaseBuyAmount){
-      //change state to buy/sell
-      const boughtsToSell = await BuyOrder.findOne({botID, sellOrderID: ''});
-      if (boughtsToSell){
-        state = 'Waiting to sell';
-      } else {
+    //change state to buy/sell
+    const boughtsToSell = await BuyOrder.findOne({botID, sellOrderID: ''});
+    if (boughtsToSell){
+      state = 'Waiting to sell';
+    } else {
+      const buyRule = botInfo.buyRule;
+      if (buyRule.increaseBuyAmount > 0 && buyRule.decreaseBuyAmount > 0 && balance > buyRule.increaseBuyAmount && balance > buyRule.decreaseBuyAmount){
         state = 'Waiting to buy';
       }
     }
@@ -143,30 +146,6 @@ router.get('/getProfits', async function(req, res){
   }
   res.json(
     result
-  );
-});
-
-router.get('/getBalances', async function(req, res){
-  const bots = await Bot.find({});
-  let balances={};
-  for (let i in bots){
-    const bot = bots[i];
-    const botid = bot._id;
-    const authInfo = bot.cbInfo;
-    const authedClient = new CoinbasePro.AuthenticatedClient(
-      authInfo.key,
-      authInfo.secret,
-      authInfo.passphrase,
-      apiURI
-    );
-    const result = await checkBalance(authedClient);
-    if (result.success){
-      const balance = result.balance;
-      balances[botid] = balance;
-    }
-  }
-  res.json(
-    balances
   );
 });
 router.get('/getStatus', async function(req, res){

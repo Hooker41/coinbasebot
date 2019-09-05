@@ -28,7 +28,11 @@ const Bot = new Schema({
     decreaseMin: {
       type: Number,
       default: -1
-    }
+    },
+    decreaseBuyAmount: {
+      type: Number,
+      default: -1
+    },
   },
   sellRule: {
     increaseAmount: {
