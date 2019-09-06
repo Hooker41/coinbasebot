@@ -183,11 +183,6 @@ timeframe selection
 }
 
 div.bot-viewer{
-    position: absolute;
-    background-color: white;
-    z-index: 100;
-    width: 100%;
-    padding-top: 30px;
     display: none;
 }
 span.viewer-botname{

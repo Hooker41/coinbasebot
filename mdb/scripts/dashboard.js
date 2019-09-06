@@ -447,6 +447,7 @@ $(document).on("click", "a.modify" , function() {
 ///////////////////////////////////////////////
 $('span#close-viewer').on('click', function(){
   $('div.bot-viewer').css('display', 'none');
+  $('div.dashboard').css('display', 'block');
 });
 ///////////////////////////////////////////////
 // Click Bot View button
@@ -456,7 +457,8 @@ $(document).on("click", "a.view" , function() {
   const bot = botsAry.find((item)=>item._id == botID);
   viewerBot = bot;
   $('span.viewer-botname').text(bot.name);
-  $('div.bot-viewer').css('display', 'flex');
+  $('div.bot-viewer').css('display', 'block');
+  $('div.dashboard').css('display', 'none');
   $.post('/api/v1.0/getBotHistory', {botID}, function(res){
     Date.prototype.formatMMDDYYYY = function(){
       var hours = this.getHours();
