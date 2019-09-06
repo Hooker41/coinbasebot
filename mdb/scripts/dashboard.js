@@ -127,7 +127,7 @@ setInterval(() => {
       sum += ele[1];
       data.push({
         t: ele[0],
-        y: ele[1]
+        y: sum
       })
     }
     console.log('all profits', data);
@@ -475,13 +475,15 @@ $(document).on("click", "a.view" , function() {
     const data = res.tabledata;
     data.map((item)=>{
       const date = new Date(item[0]).formatMMDDYYYY();
-      const boughtPrice = '$' + item[1];
-      const soldPrice = '$' + item[2];
-      const profit = '$' + parseFloat(item[3]).toFixed(4);
-      const margin = parseFloat(item[4]).toFixed(2) + '%';
+      const filledSize = item[1];
+      const boughtPrice = '$' + item[2];
+      const soldPrice = '$' + item[3];
+      const profit = '$' + parseFloat(item[4]).toFixed(4);
+      const margin = parseFloat(item[5]).toFixed(2) + '%';
       $('tbody.historytable').append(
         '<tr>'+
         '<th scope="row">'+date+'</th>'+
+        '<td>'+filledSize+'</td>'+
         '<td>'+boughtPrice+'</td>'+
         '<td>'+soldPrice+'</td>'+
         '<td>'+profit+'</td>'+

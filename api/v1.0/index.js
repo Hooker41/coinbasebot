@@ -172,7 +172,8 @@ router.post('/getBotHistory', async function(req, res){
     const soldPrice = parseFloat(item.executedValue / item.filledSize).toFixed(2);
     const profit = item.profit;
     const margin = (soldPrice / boughtPrice - 1) * 100;
-    tabledata.push([date, boughtPrice, soldPrice, profit, margin]);
+    const filledSize = item.filledSize;
+    tabledata.push([date, filledSize, boughtPrice, soldPrice, profit, margin]);
   });
   res.json({
     tabledata
