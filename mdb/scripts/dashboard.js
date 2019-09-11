@@ -68,25 +68,17 @@ var cfg = {
     scales: {
       xAxes: [{
         gridLines: {
-          // color: 'white',
           display: false
         },
         type: 'time',
         distribution: 'series',
-        // ticks: {
-        //   source: 'data',
-        //   autoSkip: true,
-        //   fontColor: 'white',
-        // }
       }],
       yAxes: [{
         position: 'right',
         ticks:{
-          // fontColor: 'white',
           display: false,
         },
         gridLines: {
-          // color: 'white',
           display: false
         },
       }]
@@ -130,7 +122,6 @@ setInterval(() => {
         y: sum
       })
     }
-    console.log('all profits', data);
     var dataset = profitChart.config.data.datasets[0];
     dataset.data = data;
     profitChart.update();
@@ -200,9 +191,52 @@ var profitChart = new Chart(profitCtx, profitCfg);
 ///////////////////////////////////////////////
 // Show Bot Chart
 ///////////////////////////////////////////////
-var botChartAry = {};
+var botChartAry = [];
 var botsAry = [];
 var viewerBot = undefined;
+var options = {
+  legend: {
+    display: false,
+  },
+  scales: {
+    xAxes: [{
+      gridLines: {
+        display: false
+      },
+      type: 'time',
+      distribution: 'series',
+    }],
+    yAxes: [{
+      position: 'right',
+      ticks:{
+        display: false,
+      },
+      gridLines: {
+        display: false
+      },
+    }]
+  },
+  tooltips: {
+    intersect: false,
+    mode: 'index',
+    displayColors: false,
+    bodyFontSize: 16,
+    footerFontColor: '#aaa',
+    callbacks: {
+      label: function(tooltipItem, myData) {
+        const label = currencyFormat(tooltipItem.value);
+        return label;
+      },
+      footer: function(tooltipItem, myData) {
+        const current = tooltipItem[0].xLabel;
+        return current;
+      },
+      title: function(tooltipItem, myData) {
+        return false;
+      }
+    }
+  }
+}
 var botCfg = {
   type: 'bar',
   data: {
@@ -211,57 +245,16 @@ var botCfg = {
       borderColor: 'blue',
       type: 'line',
       pointRadius: 0,
-      fill: false,
+      fill: true,
       lineTension: 0,
-      borderWidth: 2
+      borderWidth: 2,
+      data:[]
     }]
   },
-  options: {
-    legend: {
-			display: false,
-		},
-    scales: {
-      xAxes: [{
-        gridLines: {
-          display: false
-        },
-        type: 'time',
-        distribution: 'series',
-      }],
-      yAxes: [{
-        position: 'right',
-        ticks:{
-          display: false,
-        },
-        gridLines: {
-          display: false
-        },
-      }]
-    },
-    tooltips: {
-      intersect: false,
-      mode: 'index',
-      displayColors: false,
-      bodyFontSize: 16,
-      footerFontColor: '#aaa',
-      callbacks: {
-        label: function(tooltipItem, myData) {
-          const label = currencyFormat(tooltipItem.value);
-          return label;
-        },
-        footer: function(tooltipItem, myData) {
-          const current = tooltipItem[0].xLabel;
-          return current;
-        },
-        title: function(tooltipItem, myData) {
-          return false;
-        }
-      }
-    }
-  }
+  options
 };
 $.get('/api/v1.0/getBots', function(res){
-  botChartAry={};
+  botChartAry=[];
   botsAry=res;
   for (let i in res){
     let bot = res[i];
@@ -297,12 +290,27 @@ $.get('/api/v1.0/getBots', function(res){
     '</div>';
     $('div.bots-scroll-panel>div.card-body').append(newBot);
     let canvas = $('canvas#canvas_'+_id);
-    var botChart = new Chart(canvas, botCfg);
+    var botChart = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        datasets: [{
+          backgroundColor: 'white',
+          borderColor: 'blue',
+          type: 'line',
+          pointRadius: 0,
+          fill: true,
+          lineTension: 0,
+          borderWidth: 2,
+          data:[]
+        }]
+      },
+      options
+    });
     // var dataset = botChart.config.data.datasets[0];
     // dataset.data = [];
     // botChart.update();
 
-    botChartAry[_id] = botChart;
+    botChartAry.push([_id, botChart]);
   }
 });
 const viewerCanvas = $('canvas#viewer-chart');
@@ -311,41 +319,39 @@ var viewerChart = new Chart(viewerCanvas, botCfg);
 // Get bot profit data
 ///////////////////////////////////////////////
 const getProfits = () => {
-  $.get('/api/v1.0/getProfits', function(res){
-    console.log('profits', res);
-    if (Object.keys(botChartAry).length > 0){
-      for (let botid in res){
-        let profitAry = res[botid];
-        let data = [];
-        let profitSum = 0;
-        for (let i in profitAry){
-          let profit = profitAry[i];
-          profitSum += profit[1];
-          data.push({
-            t: profit[0],
-            y: profit[1]
-          })
-        }
-        let botchart = botChartAry[botid];
-        if (data.length > 0){
-          console.log(data);
-          var dataset = botchart.config.data.datasets[0];
-          dataset.data = data;
-          botchart.update();
-        }
-        const netspan = $('span[botid="'+botid+'"].gain-net');
-        netspan.text(currencyFormat(profitSum));
-        if (viewerBot && botid == viewerBot._id){
-          var dataset = viewerChart.config.data.datasets[0];
-          dataset.data = data;
-          viewerChart.update();
-        }
+  for(let i in botChartAry){
+    let botinfo = botChartAry[i];
+    let botid = botinfo[0]
+    let botchart = botinfo[1];
+    $.post('/api/v1.0/getProfits', {botid}, function(res){
+      let profitAry = res.result;
+      let data = [];
+      let profitSum = 0;
+      for (let i in profitAry){
+        let profit = profitAry[i];
+        profitSum += profit[1];
+        data.push({
+          t: profit[0],
+          y: profitSum
+        })
       }
-    }
-    setTimeout(() => {
-      getProfits();
-    }, 3000);
-  });
+      if (data.length > 0){
+        var dataset = botchart.data.datasets[0];
+        dataset.data = data;
+        botchart.update();
+      }
+      const netspan = $('span[botid="'+botid+'"].gain-net');
+      netspan.text(currencyFormat(profitSum));
+      if (viewerBot && botid == viewerBot._id){
+        var dataset = viewerChart.config.data.datasets[0];
+        dataset.data = data;
+        viewerChart.update();
+      }
+    });
+  }
+  setTimeout(() => {
+    getProfits();
+  }, 3000);
 }
 getProfits();
 ///////////////////////////////////////////////

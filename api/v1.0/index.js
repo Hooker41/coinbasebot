@@ -133,20 +133,14 @@ router.post('/changeState', async function(req, res){
   });
 });
 
-router.get('/getProfits', async function(req, res){
-  const bots = await Bot.find({});
-  let result = {};
-  for (let i in bots){
-    const bot = bots[i];
-    const botID = bot._id;
-    const sold = await SellOrder.find({botID});
-    let profitAry = [];
-    sold.map((item)=>profitAry.push([item.doneAt * 1000, item.profit]));
-    result[bot._id] = profitAry;
-  }
-  res.json(
-    result
-  );
+router.post('/getProfits', async function(req, res){
+  const botID = req.body.botid;
+  const sold = await SellOrder.find({botID});
+  let profitAry = [];
+  sold.map((item)=>profitAry.push([item.doneAt * 1000, item.profit]));
+  res.json({
+    result: profitAry
+  });
 });
 router.get('/getStatus', async function(req, res){
   const bots = await Bot.find({});
