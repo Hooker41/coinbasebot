@@ -34,6 +34,20 @@ const Bot = new Schema({
       default: -1
     },
   },
+  buyNowRule: {
+    active: {
+      type: Boolean,
+      default: false
+    },
+    buyNowAmt: {
+      type: Number,
+      default: -1
+    },
+    passed: {
+      type: Boolean,
+      default: false
+    }
+  },
   sellRule: {
     increaseAmount: {
       type: Number,

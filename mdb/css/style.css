@@ -122,7 +122,7 @@ html, body {
 }
 .addBotPanel{
     display: none;
-    padding: 40px 100px;
+    padding: 20px 100px;
 }
 .rule .md-form{
     display: inline-block;

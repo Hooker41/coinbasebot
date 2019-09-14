@@ -18,6 +18,10 @@ router.post('/createNewBot', async function(req, res){
       decreaseMin: params.decMin,
       decreaseBuyAmount: params.decBuyAmt
     },
+    buyNowRule:{
+      active: params.buyNowSwitch ? true : false,
+      buyNowAmt: params.buyNowAmt
+    },
     sellRule: {
       increaseAmount: params.sellIncAmt
     },
@@ -80,6 +84,11 @@ router.post('/modifyBot', async function(req, res){
       decreaseAmount: params.decAmt,
       decreaseMin: params.decMin,
       decreaseBuyAmount: params.decBuyAmt
+    },
+    buyNowRule:{
+      active: params.buyNowSwitch ? true : false,
+      buyNowAmt: params.buyNowAmt,
+      passed: false
     },
     sellRule: {
       increaseAmount: params.sellIncAmt

@@ -25,6 +25,7 @@ function getBTCUSD(granularity){
       btcchart.update();
 
       $('span#btc-label').text(currencyFormat(result[0][4]));
+      $('span#currentPrice').text(currencyFormat(result[0][4]));
     });
   }, 5000);
 }
@@ -272,7 +273,7 @@ $.get('/api/v1.0/getBots', function(res){
           '</div>'+
         '</div>'+
         '<div class="custom-control custom-switch">'+
-          '<input type="checkbox" class="custom-control-input" id="'+_id+'" '+checked+'>'+
+          '<input type="checkbox" class="custom-control-input powerswitch" id="'+_id+'" '+checked+'>'+
           '<label class="custom-control-label" for="'+_id+'"></label>'+
         '</div>'+
         '<div>'+
@@ -437,6 +438,8 @@ $(document).on("click", "a.modify" , function() {
       $('input[name="decAmt"]').val(res.buyRule.decreaseAmount);
       $('input[name="decMin"]').val(res.buyRule.decreaseMin);
       $('input[name="decBuyAmt"]').val(res.buyRule.decreaseBuyAmount);
+      $('input[name="buyNowSwitch"]').prop("checked", res.buyNowRule.active);
+      $('input[name="buyNowAmt"]').val(res.buyNowRule.buyNowAmt);
       $('input[name="sellIncAmt"]').val(res.sellRule.increaseAmount);
       $('input[name="pauseOverPrice"]').val(res.pauseRule.abovePrice);
       $('input[name="apikey"]').val(res.cbInfo.key);
@@ -500,7 +503,7 @@ $(document).on("click", "a.view" , function() {
   });
 });
 
-$(document).on("click", 'input[type="checkbox"]' , function() {
+$(document).on("click", 'input.powerswitch' , function() {
   const botID = $(this).attr('id');
   const this1 = this;
   // let isChecked = $(this).prop("checked");
