@@ -20,7 +20,8 @@ router.post('/createNewBot', async function(req, res){
     },
     buyNowRule:{
       active: params.buyNowSwitch ? true : false,
-      buyNowAmt: params.buyNowAmt
+      buyNowAmt: params.buyNowAmt,
+      passed: false
     },
     sellRule: {
       increaseAmount: params.sellIncAmt
@@ -44,7 +45,13 @@ router.post('/createNewBot', async function(req, res){
   let isAuthed = await checkBalance(authedClient);
   if (isAuthed.success){
     const balance = isAuthed.balance;
-    if (params.incBuyAmt > 0 && params.decBuyAmt > 0 && balance > params.incBuyAmt && balance > params.decBuyAmt){
+    const buyNowRule = data.buyNowRule;
+    const isBuyNow = buyNowRule.active;
+    const buyNowAmt = buyNowRule.buyNowAmt;
+    if (isBuyNow && buyNowAmt > 0){
+      data.state = 'Waiting to buy'
+    } else if ((params.incBuyAmt > 0 &&  balance > params.incBuyAmt) ||
+      (params.decBuyAmt > 0 && balance > params.decBuyAmt)){
       data.state = 'Waiting to buy'
     } else {
       data.state = 'Paused'
@@ -75,6 +82,7 @@ router.post('/getBotInfo', async function(req, res){
 router.post('/modifyBot', async function(req, res){
   let params = req.body;
   const botID = params.botid;
+  const bot = await Bot.findOne({_id: botID});
   let data = {
     name: params.botName,
     buyRule: {
@@ -88,7 +96,7 @@ router.post('/modifyBot', async function(req, res){
     buyNowRule:{
       active: params.buyNowSwitch ? true : false,
       buyNowAmt: params.buyNowAmt,
-      passed: false
+      passed: bot.buyNowRule.passed
     },
     sellRule: {
       increaseAmount: params.sellIncAmt
@@ -128,7 +136,14 @@ router.post('/changeState', async function(req, res){
       state = 'Waiting to sell';
     } else {
       const buyRule = botInfo.buyRule;
-      if (buyRule.increaseBuyAmount > 0 && buyRule.decreaseBuyAmount > 0 && balance > buyRule.increaseBuyAmount && balance > buyRule.decreaseBuyAmount){
+      const buyNowRule = botInfo.buyNowRule;
+      const isBuyNow = buyNowRule.active;
+      const buyNowAmt = buyNowRule.buyNowAmt;
+      const passed = buyNowRule.passed;
+      if (isBuyNow && !passed && buyNowAmt > 0){
+        state = 'Waiting to buy';
+      } else if ((buyRule.increaseBuyAmount > 0  && balance > buyRule.increaseBuyAmount) ||
+        (buyRule.decreaseBuyAmount > 0 && balance > buyRule.decreaseBuyAmount)){
         state = 'Waiting to buy';
       }
     }
