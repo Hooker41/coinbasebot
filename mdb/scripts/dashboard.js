@@ -286,6 +286,7 @@ $.get('/api/v1.0/getBots', function(res){
         '<div class="text-center">'+
           '<a href="#!" class="btn btn-primary view" botid="'+_id+'">View</a>'+
           '<a href="#!" class="btn btn-primary modify" botid="'+_id+'">Modify</a>'+
+          '<a href="#!" class="btn btn-primary delete" botid="'+_id+'">Delete</a>'+
         '</div>'+
       '</div>'+
     '</div>';
@@ -458,6 +459,15 @@ $('span#close-viewer').on('click', function(){
   $('div.bot-viewer').css('display', 'none');
   $('div.dashboard').css('display', 'block');
 });
+///////////////////////////////////////////////
+// Click Bot Delete button
+///////////////////////////////////////////////
+$(document).on("click", "a.delete" , function() {
+  const botID = $(this).attr('botid');
+  $.post('/api/v1.0/delete', {botID}, function(res){
+    window.location.href = "/";
+  })
+})
 ///////////////////////////////////////////////
 // Click Bot View button
 ///////////////////////////////////////////////

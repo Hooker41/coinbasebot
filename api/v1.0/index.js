@@ -209,4 +209,10 @@ router.get('/getAllProfits', async function(req, res){
     tabledata
   });
 });
+
+router.post('/delete', async function(req, res){
+  let botID = req.body.botID;
+  await Bot.deleteOne({_id: botID})
+  res.end();
+});
 module.exports = router;
