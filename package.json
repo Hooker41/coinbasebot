@@ -15,7 +15,7 @@
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "express-session": "^1.16.2",
-    "mongoose": "^5.5.7"
+    "mongoose": "^5.7.5"
   },
   "engines": {
     "node": "10.x"
